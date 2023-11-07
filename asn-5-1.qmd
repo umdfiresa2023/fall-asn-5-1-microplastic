@@ -22,24 +22,26 @@ library("tidyverse")
 Instructions: Upload your team's final dataframe into Posit Cloud. Use the read.csv function to upload the dataframe into the Posit Cloud Environment.
 
 ```{r}
-
+read.csv("finaldf.csv")
 ```
 
 **Question 1: What is the unit of each observation in the data? (2 points)**
 
 Instructions: Identify which columns in the dataset make each observation unique. Usually, there is a column indicating geographical locations and another column showing the frequency of the data. For an example, you can look at asn-6-4-key.qmd Part 1 Question 1.
 
-Answer:
+Answer: Month/Year, County, State
 
 **Question 2: What is the outcome variable? (2 points)**
 
 Instructions: Indicate which columns represent the outcome variable and describe its unit.
 
-Answer:
+Answer: PIC, TN, TOC, TON (mg/liter)
 
 **Question 3: What are the treatment and control variables?** **(4 points)**
 
 Instructions: For this assignment, you will not distinguish between the treatment and control variables. Instead, please list all treatment and control variables. For each variable, indicate whether it is a numerical variable or a categorical variable.
+
+Numerical:Evap t avg,
 
 ### **Part 2. Running a Basic Regression**
 
@@ -47,7 +49,7 @@ Instructions: For this assignment, you will not distinguish between the treatmen
 
 Instructions: Choose a numerical variable that would best predict the outcome variable. As we are trying to predict the outcome, this variable does not have to be the treatment variable.
 
-Answer:
+Answer: PIC
 
 **Question 5: What does the best-fitting line look like between the numerical variable and the outcome variable? (2 points)**
 
