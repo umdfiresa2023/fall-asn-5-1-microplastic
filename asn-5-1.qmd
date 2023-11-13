@@ -13,8 +13,8 @@ Instructions: Run the script below to download and declare the required packages
 
 ```{r}
 #| message: false
-#install.packages("moderndive")
-#install.packages("tidyverse")
+install.packages("moderndive")
+install.packages("tidyverse")
 library("moderndive")
 library("tidyverse")
 ```
@@ -61,20 +61,18 @@ Instructions: Make a scatterplot that shows the relationship between the numeric
 #install.packages("ggplot2")
 library(ggplot2)
 
-# Filter the data frame to only include rows where Parameter = "PIC"
-dfcountyPIC <- finaldf[finaldf$Parameter == "PIC", ]
-# Create a summary data table with the total sum of MeasureValue for each location
-year_sum_PIC <- aggregate(PIC ~ Year + name + state, data = dfcountyPIC, sum)
 
+sum_df <- finaldf %>%
+  group_by(name, Year) %>%
+  summarise(Sum_PIC = sum(PIC))
 
-# Create a line graph with points for all areas
-ggplot(year_sum_PIC, aes(x = Year, y = PIC, group = interaction(name, state), color = interaction(name, state))) +
-  geom_line() +
-  geom_point() +
-  theme_minimal() +
-  labs(title = "Line Graph with Points for Each Area (Parameter = PIC)",
-       x = "Year",
-       y = "MeasureValue")
+ggplot(sum_df, aes(x = Year, y = Sum_PIC)) + 
+  geom_point() + 
+  geom_smooth(method = lm, se = FALSE) + 
+  labs(title = "Scatter Plot with Line of Best Fit", 
+       x = "Years", 
+       y = "Sum of PIC")
+
 ```
 
 **Question 6: What is the slope and intercept of the best-fitting line? (2 points)**
@@ -82,18 +80,19 @@ ggplot(year_sum_PIC, aes(x = Year, y = PIC, group = interaction(name, state), co
 Instructions: Fit a regression model with the lm(y\~x, data) function to predict the outcome variable using the numerical variable that you have chosen. You can also review this concept in this [DataCamp video.](https://campus.datacamp.com/courses/modeling-with-data-in-the-tidyverse/modeling-with-basic-regression?ex=1)
 
 ```{r}
-
+model_score <- lm(Sum_PIC ~ Year, data = sum_df)
+model_score
 ```
 
 **Question 7: Based on your regression results, what are the values and description of each letter in the equation** $Y_{it} = \beta_0 + \beta_1 X_{it} + \epsilon_{it}$ **(5 points)**
 
 Instructions: For an example of this, you can review asn-6-4-key.qmd Part 1.
 
-$Y_{it}$ represent the outcome variable \_\_\_\_ for each \_\_\_\_ (geographical unit) $i$, and \_\_\_\_\_ (time unit) $t$.
+$Y_{it}$ represent the outcome variable PIC for each county (geographical unit) $i$, and year (time unit) $t$.
 
-Based on the regression from Question 6, $\beta_0$ is equal to \_\_\_\_\_.
+Based on the regression from Question 6, $\beta_0$ is equal to -4.120845
 
-Based on the regression from Question 6, $\beta_1$ is equal to \_\_\_\_\_.
+Based on the regression from Question 6, $\beta_1$ is equal to 0.02234.
 
 ### **Part 3. Running Multiple Regressions**
 
@@ -102,7 +101,7 @@ Based on the regression from Question 6, $\beta_1$ is equal to \_\_\_\_\_.
 Instructions: You can review how to do this in this [DataCamp](https://campus.datacamp.com/courses/modeling-with-data-in-the-tidyverse/modeling-with-multiple-regression?ex=4) video. Please use the get_regression_table( ) function to print the output.
 
 ```{r}
-
+get_regression_table(model_score)
 ```
 
 **Question 9: What is the sum of squared residuals of the model that you ran in Question 8? (1 point)**
@@ -110,7 +109,9 @@ Instructions: You can review how to do this in this [DataCamp](https://campus.da
 Instructions: You can review how to do this in this [DataCamp](https://campus.datacamp.com/courses/modeling-with-data-in-the-tidyverse/modeling-with-multiple-regression?ex=4) video.
 
 ```{r}
-
+get_regression_points(model_score) %>%
+  mutate(sq_residual = residual^2) %>%
+  summarize(sum_sq_residual = sum(sq_residual))
 ```
 
 **Question 10: Run a multiple regression model that uses all possible numerical, binary, and categorical variables to predict the outcome variable. What does the regression table look like? (2 points)**
@@ -133,6 +134,8 @@ Write your model below and run it.
 
 ```{r}
 
+model<- felm(PIC ~ Year + Ban + Tax | name, finaldf)
+summary(model)
 ```
 
 **Question 11: What is the sum of squared residuals from the model that you ran in Question 10? (2 points)**
@@ -141,6 +144,12 @@ Instructions: Because the function get_regression_points( ) does not work with t
 
 ```{r}
 
+res<-data.frame(model$residuals)
+names(res)<-"residual"
+
+res2<-res %>%
+  mutate(sq_residuals = residual^2) %>%
+  summarize(sum_sq_residuals = sum(sq_residuals))
 ```
 
 **Question 12: What equation describes the regression in Question 10? What are the values of each coefficient? (2 points)**
@@ -181,6 +190,6 @@ Note: Every team except Team Electric Grid and The Whistle Blowers has to comple
 
 **Question 17: In your opinion, what are some real-world factors that impact both the treatment and control variables that we have not taken into account? (2 points)**
 
-Answer:
+Answer: Waste water, agricultural practices
 
 You have reached the end of this assignment. Commit and push your updates back into the GitHub repository. You can find the step-by-step tutorial [here.](https://drive.google.com/drive/u/0/folders/1eSMfNoV_ilp4OnID2Ql3YT2qXkhCS7Vm)
