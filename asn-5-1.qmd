@@ -29,7 +29,7 @@ read.csv("finaldf.csv")
 
 Instructions: Identify which columns in the dataset make each observation unique. Usually, there is a column indicating geographical locations and another column showing the frequency of the data. For an example, you can look at asn-6-4-key.qmd Part 1 Question 1.
 
-Answer: Month/Year, County, State
+Answer: Month/Year Ban/Tax, Name, State, FIPS
 
 **Question 2: What is the outcome variable? (2 points)**
 
@@ -41,7 +41,9 @@ Answer: PIC, TN, TOC, TON (mg/liter)
 
 Instructions: For this assignment, you will not distinguish between the treatment and control variables. Instead, please list all treatment and control variables. For each variable, indicate whether it is a numerical variable or a categorical variable.
 
-Numerical:Evap t avg,
+Numerical: Evap_tavg, Qs_tavg, Rainf_f_tavg, Tair_f_tavg
+
+Categorical - Ban, Tax
 
 ### **Part 2. Running a Basic Regression**
 
@@ -64,7 +66,8 @@ Instructions: Make a scatterplot that shows the relationship between the numeric
 Instructions: Fit a regression model with the lm(y\~x, data) function to predict the outcome variable using the numerical variable that you have chosen. You can also review this concept in this [DataCamp video.](https://campus.datacamp.com/courses/modeling-with-data-in-the-tidyverse/modeling-with-basic-regression?ex=1)
 
 ```{r}
-
+install.packages("ggplot2")
+library(ggplot2)
 ```
 
 **Question 7: Based on your regression results, what are the values and description of each letter in the equation** $Y_{it} = \beta_0 + \beta_1 X_{it} + \epsilon_{it}$ **(5 points)**
