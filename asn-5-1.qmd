@@ -156,11 +156,13 @@ res2<-res %>%
 
 Instructions: You can modify the equation shown below. Afterwards, indicate the value of each $\beta$ . To see an example of how categorical variables are written in an equation, see asn-6-4-key.qmd Part 1 Question 4, 5, and 6.
 
-Answer: $Y_{it} = \beta_0 + \beta_1 X_{it} + \epsilon_{it} + \eta_{st}$
+Answer: $Y_{it} = \beta_0 + \beta_1 X_{it} + \beta_2 X_{it} + \epsilon_{it}$
 
-where $\eta_{st}$ is the categorical variable name.
+$\beta_0$ is 0.0003057, representing year
 
-$\beta_1$ is 0.0003057
+$\beta_1$ is 0.0006629, representing ban
+
+$\beta_2$ is 0 (not applicable), representing tax
 
 **Question 13: Create more binary or categorical variables by multiplying binary variables or combining categorical variables together as you see fit to better predict the outcome variable. Explain what real-world factor each new variable represents. (2 points)**
 
@@ -168,25 +170,32 @@ Instructions: You created new variables by multiplying binary variables and comb
 
 ```{r}
 
+df3<-finaldf %>%
+  mutate(var = Year*fips*(Ban*Tax))
 ```
 
-Answer:
+Answer: yr - Year
 
 **Question 14: Run a multiple regression model that uses all possible numerical, binary, and categorical variables to predict the outcome variable. What does the regression table look like? (2 points)**
 
 ```{r}
 
+model_score2 <- lm(PIC ~ Year, data = df3)
+model_score2
+get_regression_table(model_score2)
 ```
 
 **Question 15: What is the sum of squared residuals from the model in Question 13? (2 points)**
 
 ```{r}
-
+get_regression_points(model_score2) %>%
+  mutate(sq_residual = residual^2) %>%
+  summarize(sum_sq_residual = sum(sq_residual))
 ```
 
 **Question 16: Based on the sum of squared residuals, which model in this assignment best predicts the outcome? (1 point)**
 
-Answer:
+Answer: The first one best predicts the outcome
 
 ### **Part 4. Thinking about causal inference**
 
