@@ -156,7 +156,11 @@ res2<-res %>%
 
 Instructions: You can modify the equation shown below. Afterwards, indicate the value of each $\beta$ . To see an example of how categorical variables are written in an equation, see asn-6-4-key.qmd Part 1 Question 4, 5, and 6.
 
-Answer: $Y_{it} = \beta_0 + \beta_1 X_{it} + \epsilon_{it}$
+Answer: $Y_{it} = \beta_0 + \beta_1 X_{it} + \epsilon_{it} + \eta_{st}$
+
+where $\eta_{st}$ is the categorical variable name.
+
+$\beta_1$ is 0.0003057
 
 **Question 13: Create more binary or categorical variables by multiplying binary variables or combining categorical variables together as you see fit to better predict the outcome variable. Explain what real-world factor each new variable represents. (2 points)**
 
