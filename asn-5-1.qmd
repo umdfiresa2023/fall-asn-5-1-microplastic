@@ -59,7 +59,7 @@ Instructions: Make a scatterplot that shows the relationship between the numeric
 
 ```{r}
 #install.packages("ggplot2")
-library(ggplot2)
+#library(ggplot2)
 
 
 sum_df <- finaldf %>%
@@ -75,12 +75,38 @@ ggplot(sum_df, aes(x = Year, y = Sum_PIC)) +
 
 ```
 
+Your team should not aggregate the data to the year level. Instead, you should have used monthly data to include seasonal variation. (-1)
+
+Also, PIC is not summable. Your team should have used the mean instead. Please see my suggested code below:
+
+```{r}
+df<-finaldf %>%
+  mutate(date=as.Date(paste0(as.character(Year), "-", as.character(Month), "-01")))
+
+df2<-df %>%
+  filter(!is.na(PIC))
+
+ggplot(df2, aes(x = date, y = PIC)) + 
+  geom_point() + 
+  geom_smooth(method = lm, se = FALSE) + 
+  labs(title = "Scatter Plot with Line of Best Fit", 
+       x = "Date", 
+       y = "PIC")
+```
+
 **Question 6: What is the slope and intercept of the best-fitting line? (2 points)**
 
 Instructions: Fit a regression model with the lm(y\~x, data) function to predict the outcome variable using the numerical variable that you have chosen. You can also review this concept in this [DataCamp video.](https://campus.datacamp.com/courses/modeling-with-data-in-the-tidyverse/modeling-with-basic-regression?ex=1)
 
 ```{r}
 model_score <- lm(Sum_PIC ~ Year, data = sum_df)
+model_score
+```
+
+Please see my suggestion using monthly data:
+
+```{r}
+model_score <- lm(PIC ~ Year, data = df)
 model_score
 ```
 
@@ -135,6 +161,13 @@ Write your model below and run it.
 ```{r}
 
 model<- felm(PIC ~ Year + Ban + Tax | name, finaldf)
+summary(model)
+```
+
+Please see my suggestion below:
+
+```{r}
+model<- felm(PIC ~ Year + Ban + Tax | name + Month , df)
 summary(model)
 ```
 
